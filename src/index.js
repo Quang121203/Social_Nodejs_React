@@ -5,7 +5,10 @@ const router = require('./router.js')
 const app = express()
 const port = process.env.port;
 
-app.use('/', router)
+//set up req.body
+app.use(express.json());
+
+app.use('/api', router)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
