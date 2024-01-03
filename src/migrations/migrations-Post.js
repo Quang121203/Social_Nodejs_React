@@ -14,9 +14,10 @@ module.exports = {
       },   
       like: {
         type: Sequelize.STRING,
+        defaultValue:'',
         get() {
           const stringValue = this.getDataValue('like');
-          return stringValue ? rawValue.split(',') : null;
+          return stringValue ? stringValue.split(',') : [];
         },
         set(value) {
           const arrayValue = value ? value.join(',') : '';

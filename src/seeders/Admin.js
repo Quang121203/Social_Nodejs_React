@@ -9,6 +9,7 @@ module.exports = {
       email: 'admin@gmail.com',
       username: 'admin',
       password: '123456',
+      isAdmin: true
     }], {});
 
   },

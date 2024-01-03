@@ -19,8 +19,28 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     profilePicture: DataTypes.STRING,
     coverPicture: DataTypes.STRING,
-    followers: DataTypes.STRING,
-    followings: DataTypes.STRING,
+    followers:  {
+      type: DataTypes.STRING,
+      get() {
+        const stringValue = this.getDataValue('followers');
+        return stringValue ? stringValue.split(',') : [];
+      },
+      set(value) {
+        const arrayValue = value ? value.join(',') : '';
+        this.setDataValue('followers', arrayValue);
+      },
+    },
+    followings:  {
+      type: DataTypes.STRING,
+      get() {
+        const stringValue = this.getDataValue('followings');
+        return stringValue ? stringValue.split(',') : [];
+      },
+      set(value) {
+        const arrayValue = value ? value.join(',') : '';
+        this.setDataValue('followings', arrayValue);
+      },
+    },
     isAdmin: DataTypes.BOOLEAN,
     desc: DataTypes.STRING,
     city: DataTypes.STRING,

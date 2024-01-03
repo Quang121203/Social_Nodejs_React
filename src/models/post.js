@@ -17,7 +17,17 @@ module.exports = (sequelize, DataTypes) => {
     userID: DataTypes.STRING,
     desc: DataTypes.STRING,
     img: DataTypes.STRING,
-    likes: DataTypes.STRING,
+    likes: {
+      type: DataTypes.STRING,
+      get() {
+        const stringValue = this.getDataValue('like');
+        return stringValue ? stringValue.split(',') : [];
+      },
+      set(value) {
+        const arrayValue = value ? value.join(',') : '';
+        this.setDataValue('like', arrayValue);
+      },
+    },
   }, {
     sequelize,
     modelName: 'Post',

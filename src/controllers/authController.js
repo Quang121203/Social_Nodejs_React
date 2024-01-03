@@ -1,34 +1,65 @@
 const userServices = require('../services/userServices');
 
 
-const login = (req, res) => {
-    res.send('Birds home pageasasdd')
+const login = async (req, res) => {
+    try {
+        const checkUser = await userServices.getUser(req.body.email);
+        if (!checkUser) {
+            return res.status(200).json({
+                EC: 1,
+                EM: "email dont have exits",
+                DT: ''
+            })
+        }
+
+        const checkPass =userServices.checkPass(req.body.password,checkUser.password);
+        if (checkPass) {
+            return res.status(200).json({
+                EC: 0,
+                EM: "login success",
+                DT: ''
+            })
+        }
+
+        return res.status(200).json({
+            EC: 1,
+            EM: "password not right",
+            DT: ''
+        })
+        
+    } catch (err) {
+        return res.status(404).json({
+            EC: -1,
+            EM: err,
+            DT: ''
+        })
+    }
 }
 
 const register = async (req, res) => {
     try {
-        console.log(req.body);
-        const checkEmail =await userServices.checkEmail(req.body.email);
+        const checkEmail = await userServices.getUser(req.body.email);
 
         if (checkEmail) {
             return res.status(200).json({
-                EC: -1,
+                EC: 1,
                 EM: "email have exits",
                 DT: ''
             })
         }
 
+        req.body.password= userServices.hashPass(req.body.password);
         await userServices.createUser(req.body);
 
         return res.status(200).json({
             EC: 0,
-            EM: "success",
+            EM: "register success",
             DT: ''
         })
 
     } catch (err) {
         return res.status(404).json({
-            EC: 1,
+            EC: -1,
             EM: err,
             DT: ''
         })

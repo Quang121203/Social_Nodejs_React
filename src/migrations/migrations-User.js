@@ -26,20 +26,23 @@ module.exports = {
       },
       followers: {
         type: Sequelize.STRING,
+        defaultValue: '',
         get() {
           const stringValue = this.getDataValue('followers');
-          return stringValue ? rawValue.split(',') : null;
+          return stringValue ? stringValue.split(',') : [];
         },
         set(value) {
+          console.log("check",value);
           const arrayValue = value ? value.join(',') : '';
           this.setDataValue('followers', arrayValue);
         },
       },
       followings: {
         type: Sequelize.STRING,
+        defaultValue: '',
         get() {
           const stringValue = this.getDataValue('followings');
-          return stringValue ? rawValue.split(',') : null;
+          return stringValue ? stringValue.split(',') : [];
         },
         set(value) {
           const arrayValue = value ? value.join(',') : '';
