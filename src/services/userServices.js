@@ -36,7 +36,6 @@ const createUser = async (user) => {
 }
 
 const updateUser = async (user, id) => {
-    console.log("check user",user);
     return await db.User.update({ ...user, id: id }, {
         where: {
             id

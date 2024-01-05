@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     userID: DataTypes.STRING,
     desc: DataTypes.STRING,
     img: DataTypes.STRING,
-    likes: {
+    like: {
       type: DataTypes.STRING,
       get() {
         const stringValue = this.getDataValue('like');
