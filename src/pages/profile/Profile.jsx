@@ -4,7 +4,26 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
 
+import { useEffect, useState } from "react";
+import axios from "../../config/axios";
+
 export default function Profile() {
+  const [userProfile, setUserProfile] = useState({});
+
+
+  useEffect(() => {
+    getUser(2);
+    
+  }, [])
+
+  const getUser = async (id) => {
+    const user = await axios.get(`/user/${id}`);
+    console.log(user.data.DT);
+    if (user && user.data && user.data.DT) {
+      setUserProfile(user.data.DT);
+    }
+  }
+
   return (
     <>
       <Topbar />
@@ -15,23 +34,23 @@ export default function Profile() {
             <div className="profileCover">
               <img
                 className="profileCoverImg"
-                src="assets/post/3.jpeg"
+                src={process.env.REACT_APP_ASSETS + "/post/3.jpeg"}
                 alt=""
               />
               <img
                 className="profileUserImg"
-                src="assets/person/7.jpeg"
+                src={process.env.REACT_APP_ASSETS + "/person/7.jpeg"}
                 alt=""
               />
             </div>
             <div className="profileInfo">
-                <h4 className="profileInfoName">Safak Kocaoglu</h4>
-                <span className="profileInfoDesc">Hello my friends!</span>
+              <h4 className="profileInfoName">{userProfile.username}</h4>
+              <span className="profileInfoDesc">{userProfile.desc}</span>
             </div>
           </div>
           <div className="profileRightBottom">
             <Feed />
-            <Rightbar profile/>
+            <Rightbar profile />
           </div>
         </div>
       </div>

@@ -8,23 +8,23 @@ export default function Sidebar() {
       <div className="sidebarWrapper">
         <ul className="sidebarList">
           <li className="sidebarListItem">
-            <i class="fa-solid fa-rss sidebarIcon"></i>
+            <i className="fa-solid fa-rss sidebarIcon"></i>
             <span className="sidebarListItemText">Feed</span>
           </li>
           <li className="sidebarListItem">
-            <i class="fa-solid fa-comment sidebarIcon"></i>
+            <i className="fa-solid fa-comment sidebarIcon"></i>
             <span className="sidebarListItemText">Chats</span>
           </li>
           <li className="sidebarListItem">
-            <i class="fa-solid fa-video sidebarIcon"></i>
+            <i className="fa-solid fa-video sidebarIcon"></i>
             <span className="sidebarListItemText">Videos</span>
           </li>
           <li className="sidebarListItem">
-            <i class="fa-solid fa-user-group sidebarIcon"></i>
+            <i className="fa-solid fa-user-group sidebarIcon"></i>
             <span className="sidebarListItemText">Groups</span>
           </li>
           <li className="sidebarListItem">
-            <i class="fa-solid fa-bookmark sidebarIcon"></i>
+            <i className="fa-solid fa-bookmark sidebarIcon"></i>
             <span className="sidebarListItemText">Bookmarks</span>
           </li>
         </ul>

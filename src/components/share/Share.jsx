@@ -5,7 +5,7 @@ export default function Share() {
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">
-          <img className="shareProfileImg" src="/assets/person/1.jpeg" alt="" />
+          <img className="shareProfileImg" src={process.env.REACT_APP_ASSETS+"/person/1.jpeg"} alt="" />
           <input
             placeholder="What's in your mind Safak?"
             className="shareInput"
@@ -15,19 +15,19 @@ export default function Share() {
         <div className="shareBottom">
             <div className="shareOptions">
                 <div className="shareOption">
-                    <i class="fa-solid fa-video shareIcon" styles="color: #e70d0d;"></i>
+                    <i className="fa-solid fa-video shareIcon" styles="color: #e70d0d;"></i>
                     <span className="shareOptionText">Photo or Video</span>
                 </div>
                 <div className="shareOption">
-                    <i class="fa-solid fa-tags shareIcon" styles="color: #0860f7;"></i>
+                    <i className="fa-solid fa-tags shareIcon" styles="color: #0860f7;"></i>
                     <span className="shareOptionText">Tag</span>
                 </div>
                 <div className="shareOption">
-                    <i class="fa-solid fa-house shareIcon" styles="color: #06f94f;"></i>
+                    <i className="fa-solid fa-house shareIcon" styles="color: #06f94f;"></i>
                     <span className="shareOptionText">Location</span>
                 </div>
                 <div className="shareOption">
-                    <i class="fa-solid fa-face-smile shareIcon" styles="color: #e5dd06;"></i>
+                    <i className="fa-solid fa-face-smile shareIcon" styles="color: #e5dd06;"></i>
                     <span className="shareOptionText">Feelings</span>
                 </div>
             </div>

@@ -8,7 +8,7 @@ export default function Topbar() {
       </div>
       <div className="topbarCenter">
         <div className="searchbar">
-          <i class="fa-solid fa-magnifying-glass searchIcon"></i>
+          <i className="fa-solid fa-magnifying-glass searchIcon"></i>
           <input
             placeholder="Search for friend, post or video"
             className="searchInput"
@@ -22,15 +22,15 @@ export default function Topbar() {
         </div>
         <div className="topbarIcons">
           <div className="topbarIconItem">
-            <i class="fa-solid fa-user"></i>
+            <i className="fa-solid fa-user"></i>
             <span className="topbarIconBadge">1</span>
           </div>
           <div className="topbarIconItem">
-            <i class="fa-solid fa-comment"></i>
+            <i className="fa-solid fa-comment"></i>
             <span className="topbarIconBadge">2</span>
           </div>
           <div className="topbarIconItem">
-            <i class="fa-solid fa-bell"></i>
+            <i className="fa-solid fa-bell"></i>
             <span className="topbarIconBadge">1</span>
           </div>
         </div>
