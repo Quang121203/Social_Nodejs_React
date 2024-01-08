@@ -5,21 +5,21 @@ import Feed from "../../components/feed/Feed";
 import Rightbar from "../../components/rightbar/Rightbar";
 
 import { useEffect, useState } from "react";
+import {  useParams } from 'react-router-dom';
 import axios from "../../config/axios";
 
 export default function Profile() {
   const [userProfile, setUserProfile] = useState({});
-
-
+  const  {id}  = useParams();
+ 
   useEffect(() => {
-    getUser(2);
-    
-  }, [])
+    getUser(id);
+  }, [id])
 
   const getUser = async (id) => {
     const user = await axios.get(`/user/${id}`);
     console.log(user.data.DT);
-    if (user && user.data && user.data.DT) {
+    if (user && user.data && user.data.DT && user.data.EC===+0) {
       setUserProfile(user.data.DT);
     }
   }
@@ -34,12 +34,12 @@ export default function Profile() {
             <div className="profileCover">
               <img
                 className="profileCoverImg"
-                src={process.env.REACT_APP_ASSETS + "/post/3.jpeg"}
+                src={userProfile.coverPicture?userProfile.coverPicture:process.env.REACT_APP_ASSETS + "/person/noCover.png"}
                 alt=""
               />
               <img
                 className="profileUserImg"
-                src={process.env.REACT_APP_ASSETS + "/person/7.jpeg"}
+                src={userProfile.profilePicture?userProfile.profilePicture:process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
                 alt=""
               />
             </div>
@@ -49,8 +49,8 @@ export default function Profile() {
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed />
-            <Rightbar profile />
+            <Feed idUser={id}/>
+            <Rightbar user={userProfile} />
           </div>
         </div>
       </div>
