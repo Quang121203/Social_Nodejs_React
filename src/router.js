@@ -21,6 +21,7 @@ router.put('/post/:id',postController.updatePost);
 router.delete('/post/:id',postController.deletePost);
 router.post('/post/:id/like',postController.likePost);
 router.get('/post/:id/timeline',postController.getPostTimeline);
+router.get('/post/:id/',postController.getPost);
 
 
 module.exports = router

@@ -17,7 +17,7 @@ const login = async (req, res) => {
             return res.status(200).json({
                 EC: 0,
                 EM: "login success",
-                DT: ''
+                DT: checkUser
             })
         }
 

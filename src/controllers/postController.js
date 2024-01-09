@@ -136,19 +136,14 @@ const getPostTimeline = async (req, res) => {
         const user = await userServices.findUserById(req.params.id);
         const postUser = await postServices.getPostTimeline(req.params.id);
 
-        let postFriendUser = [];
-        postFriendUser = postFriendUser.concat( postUser.Posts);
-        
         const promises = user.followings.map(async (item) => {
             const post = await postServices.getPostTimeline(item);
             return post.Posts;
         });
-        
+
         const results = await Promise.all(promises);
 
-        //postUser.Posts.map(item => postFriendUser.push(item.id));
-        postFriendUser = postFriendUser.concat( results);
-        postFriendUser = postFriendUser.concat( postUser.Posts);
+        const postFriendUser = [].concat(...results, postUser.Posts);
 
         return res.status(200).json({
             EC: 0,
@@ -164,7 +159,26 @@ const getPostTimeline = async (req, res) => {
     }
 }
 
+const getPost = async (req, res) => {
+    try {
+        const postUser = await postServices.getPostTimeline(req.params.id);
+
+        return res.status(200).json({
+            EC: 0,
+            EM: 'get post successful',
+            DT: postUser.Posts
+        })
+
+    } catch (err) {
+        return res.status(404).json({
+            EC: -1,
+            EM: err,
+            DT: ''
+        })
+    }
+}
+
 module.exports = {
-    createPost, updatePost, deletePost, getPostTimeline,
+    createPost, updatePost, deletePost, getPostTimeline, getPost,
     likePost
 };
