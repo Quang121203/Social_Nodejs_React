@@ -1,9 +1,29 @@
 import "./rightbar.css";
-import { Users } from "../../dummyData";
 import Online from "../online/Online";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "../../config/axios";
 
 export default function Rightbar({ user }) {
   const HomeRightbar = () => {
+    const [followings, setFollowings] = useState([]);
+    const { user: userCurrent } = useContext(AuthContext);
+
+    useEffect(() => {
+      getUserFollowings(userCurrent);
+    }, [userCurrent])
+
+    const getUserFollowings = async (userCurrent) => {
+
+      const promises = userCurrent.followings.map(async (id) => {
+        const res = await axios.get(`/user/${id}`);
+        return (res.data.DT);
+      })
+
+      const results = await Promise.all(promises);
+      setFollowings(results);
+    }
+
     return (
       <>
         <div className="birthdayContainer">
@@ -15,7 +35,7 @@ export default function Rightbar({ user }) {
         <img className="rightbarAd" src={process.env.REACT_APP_ASSETS + "/ad.png"} alt="" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
-          {Users.map((u) => (
+          {followings.map((u) => (
             <Online key={u.id} user={u} />
           ))}
         </ul>
@@ -23,18 +43,36 @@ export default function Rightbar({ user }) {
     );
   };
 
-  const ProfileRightbar = () => {
+  const ProfileRightbar = ({ user }) => {
+    const [followings, setFollowings] = useState([]);
+
+    useEffect(() => {
+      user && user.followings && getUserFollowings(user);
+    }, [user])
+
+    const getUserFollowings = async (user) => {
+
+      const promises = user.followings.map(async (id) => {
+        const res = await axios.get(`/user/${id}`);
+        return (res.data.DT);
+      })
+
+      const results = await Promise.all(promises);
+
+      setFollowings(results);
+    }
     return (
       <>
         <h4 className="rightbarTitle">User information</h4>
         <div className="rightbarInfo">
+
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">City:</span>
-            <span className="rightbarInfoValue">{user.city?user.city:".........."}</span>
+            <span className="rightbarInfoValue">{user.city ? user.city : ".........."}</span>
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">From:</span>
-            <span className="rightbarInfoValue">{user.from?user.from:".........."}</span>
+            <span className="rightbarInfoValue">{user.from ? user.from : ".........."}</span>
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">Relationship:</span>
@@ -43,54 +81,16 @@ export default function Rightbar({ user }) {
         </div>
         <h4 className="rightbarTitle">User friends</h4>
         <div className="rightbarFollowings">
-          <div className="rightbarFollowing">
-            <img
-              src={process.env.REACT_APP_ASSETS + "/person/1.jpeg"}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={process.env.REACT_APP_ASSETS + "/person/1.jpeg"}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={process.env.REACT_APP_ASSETS + "/person/1.jpeg"}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={process.env.REACT_APP_ASSETS + "/person/1.jpeg"}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={process.env.REACT_APP_ASSETS + "/person/1.jpeg"}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src={process.env.REACT_APP_ASSETS + "/person/1.jpeg"}
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
+          {followings && followings.map((u) => (
+            <div className="rightbarFollowing" key={u.id}>
+              <img
+                src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
+                alt=""
+                className="rightbarFollowingImg"
+              />
+              <span className="rightbarFollowingName">{u.username}</span>
+            </div>
+          ))}
         </div>
       </>
     );
@@ -98,7 +98,7 @@ export default function Rightbar({ user }) {
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
-        {user ? <ProfileRightbar /> : <HomeRightbar />}
+        {user ? <ProfileRightbar user={user} /> : <HomeRightbar />}
       </div>
     </div>
   );

@@ -7,24 +7,26 @@ import {
   BrowserRouter,
   Route,
   Routes,
+  Navigate
 } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PrivateRoute from "./components/PrivateRoute"
+
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 
-
 function App() {
   const { user } = useContext(AuthContext);
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={user ? <Home /> : <Login />} />
-          <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/login" element={user ? <Login /> : <Home />} />
-          
-          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+          <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+          <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
         </Routes>
       </BrowserRouter>
 

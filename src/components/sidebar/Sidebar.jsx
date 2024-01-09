@@ -1,8 +1,31 @@
 import "./sidebar.css";
-import { Users } from "../../dummyData";
 import CloseFriend from "../closeFriend/CloseFriend";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "../../config/axios";
+
 
 export default function Sidebar() {
+
+  const [followings, setFollowings] = useState([]);
+  const { user } = useContext(AuthContext);
+  console.log(user);
+  useEffect(() => {
+    getUserFollowings(user);
+  }, [user])
+
+  const getUserFollowings = async (user) => {
+
+    const promises = user.followings.map(async (id) => {
+      const res = await axios.get(`/user/${id}`);
+      return (res.data.DT);
+    })
+
+    const results = await Promise.all(promises);
+    console.log(results);
+    setFollowings(results);
+  }
+
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -31,7 +54,7 @@ export default function Sidebar() {
         <button className="sidebarButton">Show More</button>
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
-          {Users.map((u) => (
+          {followings.map((u) => (
             <CloseFriend key={u.id} user={u} />
           ))}
         </ul>

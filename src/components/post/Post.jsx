@@ -1,6 +1,7 @@
 import "./post.css";
 import axios from "../../config/axios";
-import { useState,useEffect} from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Post({ post }) {
   const [like, setLike] = useState(post.like.length)
@@ -11,7 +12,7 @@ export default function Post({ post }) {
     setLike(isLiked ? like - 1 : like + 1)
     setIsLiked(!isLiked)
   }
-  
+
   useEffect(() => {
     getUser(post.userID);
   }, [post])
@@ -28,11 +29,13 @@ export default function Post({ post }) {
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <img
-              className="postProfileImg"
-              src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
-              alt=""
-            />
+            <Link to={`/profile/${post.userID}`}>
+              <img
+                className="postProfileImg"
+                src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
+                alt=""
+              />
+            </Link>
             <span className="postUsername">
               {user.username}
             </span>

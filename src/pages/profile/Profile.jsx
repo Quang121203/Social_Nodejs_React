@@ -18,7 +18,6 @@ export default function Profile() {
 
   const getUser = async (id) => {
     const user = await axios.get(`/user/${id}`);
-    console.log(user.data.DT);
     if (user && user.data && user.data.DT && user.data.EC===+0) {
       setUserProfile(user.data.DT);
     }
