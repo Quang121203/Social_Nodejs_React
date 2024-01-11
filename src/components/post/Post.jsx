@@ -1,21 +1,26 @@
 import "./post.css";
 import axios from "../../config/axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+
 
 export default function Post({ post }) {
+ 
+  const { user:userCurrent } = useContext(AuthContext);
   const [like, setLike] = useState(post.like.length)
-  const [isLiked, setIsLiked] = useState(false)
+  const [isLiked, setIsLiked] = useState(post.like.includes(userCurrent.id.toString()))
   const [user, setUser] = useState({});
 
-  const likeHandler = () => {
+  const likeHandler = async () => {
     setLike(isLiked ? like - 1 : like + 1)
     setIsLiked(!isLiked)
+    await axios.post(`/post/${post.id}/like`,{userID:userCurrent.id});
   }
 
   useEffect(() => {
     getUser(post.userID);
-  }, [post])
+  }, [post,userCurrent.id])
 
   const getUser = async (id) => {
     const user = await axios.get(`/user/${id}`);
@@ -23,6 +28,7 @@ export default function Post({ post }) {
       setUser(user.data.DT);
     }
   }
+
 
   return (
     <div className="post">
@@ -47,7 +53,7 @@ export default function Post({ post }) {
         </div>
         <div className="postCenter">
           <span className="postText">{post?.desc}</span>
-          <img className="postImg" src={post?.img} alt="" />
+          <img className="postImg" src={post.img && process.env.REACT_APP_ASSETS + `/${post.img}` } alt="" />
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">

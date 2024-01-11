@@ -3,12 +3,14 @@ import "./login.css";
 import axios from "../../config/axios";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from 'react-toastify';
+import { Link } from "react-router-dom";
+
 
 export default function Login() {
   const email = useRef();
   const password = useRef();
 
-  const { user, dispatch, isFetching } = useContext(AuthContext);
+  const {  dispatch, isFetching } = useContext(AuthContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -31,15 +33,14 @@ export default function Login() {
     }
   }
 
-  console.log(user);
 
   return (
     <div className="login">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <h3 className="loginLogo">Lamasocial</h3>
+          <h3 className="loginLogo">Social</h3>
           <span className="loginDesc">
-            Connect with friends and the world around you on Lamasocial.
+            Connect with friends and the world around you on Social.
           </span>
         </div>
         <div className="loginRight">
@@ -48,10 +49,11 @@ export default function Login() {
             <input placeholder="Password" className="loginInput" ref={password} type="password" minLength="6" required />
             <button className="loginButton" type="submit" disabled={isFetching}>Log In</button>
             <span className="loginForgot">Forgot Password?</span>
-            <button className="loginRegisterButton" disabled={isFetching}>
+            <Link className="loginRegisterButton" disabled={isFetching} to="/register">
               Create a New Account
-            </button>
+            </Link>
           </form>
+          
         </div>
       </div>
     </div>

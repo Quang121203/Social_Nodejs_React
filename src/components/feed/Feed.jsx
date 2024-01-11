@@ -25,7 +25,7 @@ export default function Feed({ idUser }) {
   const getPostProfile = async (idUser) => {
     const post = await axios.get(`/post/${idUser}`);
     if (post && post.data && post.data.EC === +0 && post.data.DT) {
-      post.data.DT.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      post.data.DT.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setPost(post.data.DT);
     }
   }
@@ -33,7 +33,7 @@ export default function Feed({ idUser }) {
   const getPostTimeline = async (idUser) => {
     const post = await axios.get(`/post/${idUser}/timeline`);
     if (post && post.data && post.data.EC === +0 && post.data.DT) {
-      post.data.DT.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      post.data.DT.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setPost(post.data.DT);
     }
   }
@@ -41,7 +41,7 @@ export default function Feed({ idUser }) {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        {(!idUser || +user.id === +idUser) && <Share />}
+        {(!idUser || +user.id === +idUser) && <Share getPostProfile={idUser?getPostProfile:null} getPostTimeline={getPostTimeline}/>}
         {post.map((p) => (
           <Post key={p.id} post={p} />
         ))}

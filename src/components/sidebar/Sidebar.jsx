@@ -9,7 +9,7 @@ export default function Sidebar() {
 
   const [followings, setFollowings] = useState([]);
   const { user } = useContext(AuthContext);
-  console.log(user);
+  
   useEffect(() => {
     getUserFollowings(user);
   }, [user])
@@ -22,7 +22,7 @@ export default function Sidebar() {
     })
 
     const results = await Promise.all(promises);
-    console.log(results);
+   
     setFollowings(results);
   }
 

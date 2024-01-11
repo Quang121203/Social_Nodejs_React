@@ -11,8 +11,8 @@ export default function Topbar() {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <Link to="/">
-          <span className="logo">Social</span>
+        <Link to="/" className="logo">
+          Social
         </Link>
       </div>
       <div className="topbarCenter">

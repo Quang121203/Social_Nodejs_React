@@ -3,23 +3,24 @@ import Online from "../online/Online";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "../../config/axios";
+import { Link } from "react-router-dom";
 
 export default function Rightbar({ user }) {
+
+  const { user: userCurrent, dispatch } = useContext(AuthContext);
+
   const HomeRightbar = () => {
     const [followings, setFollowings] = useState([]);
-    const { user: userCurrent } = useContext(AuthContext);
 
     useEffect(() => {
       getUserFollowings(userCurrent);
-    }, [userCurrent])
+    }, [])
 
     const getUserFollowings = async (userCurrent) => {
-
       const promises = userCurrent.followings.map(async (id) => {
         const res = await axios.get(`/user/${id}`);
         return (res.data.DT);
       })
-
       const results = await Promise.all(promises);
       setFollowings(results);
     }
@@ -45,24 +46,46 @@ export default function Rightbar({ user }) {
 
   const ProfileRightbar = ({ user }) => {
     const [followings, setFollowings] = useState([]);
+    const [followed, setFollowed] = useState(user.id ? userCurrent.followings.includes(user.id.toString()) : false);
+
+    console.log(userCurrent);
 
     useEffect(() => {
       user && user.followings && getUserFollowings(user);
     }, [user])
 
     const getUserFollowings = async (user) => {
-
       const promises = user.followings.map(async (id) => {
         const res = await axios.get(`/user/${id}`);
         return (res.data.DT);
       })
 
       const results = await Promise.all(promises);
-
       setFollowings(results);
     }
+
+    const handleFollow = async () => {
+
+      if (!followed) {
+        axios.post(`/user/${user.id}/follow`, { id: userCurrent.id });
+        dispatch({ type: "FOLLOW", payload: user.id.toString() });
+      }
+      else {
+        axios.post(`/user/${user.id}/unfollow`, { id: userCurrent.id });
+        dispatch({ type: "UNFOLLOW", payload: user.id.toString() });
+      }
+      setFollowed(!followed)
+
+    }
+
     return (
       <>
+        {user.id !== userCurrent.id && (
+          <button className="rightbarFollowButton" onClick={() => handleFollow()}>
+            {followed ? "Unfollow" : "Follow"}
+            {followed ? <i className="fa-solid fa-minus"></i> : <i className="fa-solid fa-plus"></i>}
+          </button>
+        )}
         <h4 className="rightbarTitle">User information</h4>
         <div className="rightbarInfo">
 
@@ -83,11 +106,13 @@ export default function Rightbar({ user }) {
         <div className="rightbarFollowings">
           {followings && followings.map((u) => (
             <div className="rightbarFollowing" key={u.id}>
-              <img
-                src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
-                alt=""
-                className="rightbarFollowingImg"
-              />
+              <Link to={`/profile/${u.id}`}>
+                <img
+                  src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
+                  alt=""
+                  className="rightbarFollowingImg"
+                />
+              </Link>
               <span className="rightbarFollowingName">{u.username}</span>
             </div>
           ))}
