@@ -96,7 +96,7 @@ const follow = async (req, res) => {
             const currentUser = await userServices.findUserById(req.body.id);
             const user = await userServices.findUserById(req.params.id);
 
-            if (currentUser.followings.includes(req.params.id)) {
+            if (currentUser.followings.includes(req.params.id.toString())) {
                 return res.status(200).json({
                     EC: 1,
                     EM: "you already follow this user",
@@ -151,7 +151,7 @@ const unfollow = async (req, res) => {
             const currentUser = await userServices.findUserById(req.body.id);
             const user = await userServices.findUserById(req.params.id);
 
-            if (!currentUser.followings.includes(req.params.id)) {
+            if (!currentUser.followings.includes(req.params.id.toString())) {
                 return res.status(200).json({
                     EC: 1,
                     EM: "you already unfollow this user",

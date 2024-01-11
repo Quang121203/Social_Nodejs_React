@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
+
 const authController =require('./controllers/authController.js')
 const userController =require('./controllers/userController.js')
 const postController =require('./controllers/postController.js')
+const imgController =require('./controllers/imgController.js')
 
 // auth routes
 router.post('/register', authController.register);
@@ -23,5 +25,7 @@ router.post('/post/:id/like',postController.likePost);
 router.get('/post/:id/timeline',postController.getPostTimeline);
 router.get('/post/:id/',postController.getPost);
 
+//post images
+router.post('/images',imgController.upload.single("file"),imgController.createImage);
 
 module.exports = router

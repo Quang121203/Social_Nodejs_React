@@ -3,7 +3,6 @@ const postServices = require('../services/postServices');
 
 
 const createPost = async (req, res) => {
-    console.log(req.body);
     try {
         const user = await userServices.findUserById(req.body.userID);
 
@@ -102,7 +101,7 @@ const likePost = async (req, res) => {
 
         let likes = post.like;
 
-        if (likes.includes(req.body.userID)) {
+        if (likes.includes(req.body.userID.toString())) {
             likes = likes.filter((id) => {
                 return id != +req.body.userID
             })

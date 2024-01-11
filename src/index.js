@@ -1,11 +1,11 @@
 const express = require('express')
 require('dotenv').config();
 const router = require('./router.js')
-
-
-
+const path = require('path')
 
 const app = express()
+
+app.use("/images",express.static(path.join(__dirname, '../public')));
 
 app.use(function (req, res, next) {
 
