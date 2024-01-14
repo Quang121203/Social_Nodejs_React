@@ -76,3 +76,19 @@
     border-bottom: 1px dashed gray;
     font-size: 15px;
 }
+
+.tippyPost{
+  width: 10vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.tippyPost button{
+  border: none;
+
+}
+
+.tippyPost hr{
+ margin: 0px;
+ height: 2px;
+}

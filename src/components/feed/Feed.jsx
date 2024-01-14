@@ -43,7 +43,7 @@ export default function Feed({ idUser }) {
       <div className="feedWrapper">
         {(!idUser || +user.id === +idUser) && <Share getPostProfile={idUser?getPostProfile:null} getPostTimeline={getPostTimeline}/>}
         {post.map((p) => (
-          <Post key={p.id} post={p} />
+          <Post key={p.id} post={p} getPostProfile={idUser?getPostProfile:null} getPostTimeline={getPostTimeline}/>
         ))}
       </div>
     </div>

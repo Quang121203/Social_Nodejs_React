@@ -20,7 +20,7 @@
   color: white;
   cursor: pointer;
   text-decoration: none;
-  
+
 }
 
 .topbarCenter {
@@ -38,7 +38,7 @@
 
 .searchIcon {
   font-size: 20px !important;
-  margin-left: 10px;
+  margin: 0px 10px;
 }
 
 .searchInput {
@@ -95,4 +95,14 @@
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
+}
+
+.tippy {
+  width: 40vw !important;
+  box-shadow: rgba(95, 90, 90, 0.12) 0px 2px 12px;
+  max-height: 70vh;
+  border-radius: 8px;
+  background-color: rgb(242, 233, 233);
+  overflow-y: scroll;
+
 }

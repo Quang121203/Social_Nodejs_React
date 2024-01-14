@@ -4,10 +4,12 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "../../config/axios";
 import { Link } from "react-router-dom";
+import ModalUpdate from "../modalUpdate/modalUpdate";
 
 export default function Rightbar({ user }) {
 
   const { user: userCurrent, dispatch } = useContext(AuthContext);
+
 
   const HomeRightbar = () => {
     const [followings, setFollowings] = useState([]);
@@ -47,8 +49,7 @@ export default function Rightbar({ user }) {
   const ProfileRightbar = ({ user }) => {
     const [followings, setFollowings] = useState([]);
     const [followed, setFollowed] = useState(user.id ? userCurrent.followings.includes(user.id.toString()) : false);
-
-    console.log(userCurrent);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
       user && user.followings && getUserFollowings(user);
@@ -78,6 +79,15 @@ export default function Rightbar({ user }) {
 
     }
 
+    const handleUpdate = () => {
+      setShow(true);
+    }
+
+    const handleClose = () => {
+      setShow(false);
+    }
+
+
     return (
       <>
         {user.id !== userCurrent.id && (
@@ -86,20 +96,37 @@ export default function Rightbar({ user }) {
             {followed ? <i className="fa-solid fa-minus"></i> : <i className="fa-solid fa-plus"></i>}
           </button>
         )}
+
+        {user.id === userCurrent.id && (
+          <button className="rightbarFollowButton" onClick={() => handleUpdate()}>
+            Update information
+          </button >
+        )
+        }
+
         <h4 className="rightbarTitle">User information</h4>
         <div className="rightbarInfo">
 
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">City:</span>
-            <span className="rightbarInfoValue">{user.city ? user.city : ".........."}</span>
+            {+userCurrent.id === +user.id ?
+              <span className="rightbarInfoValue">{userCurrent.city ? userCurrent.city : ".........."}</span>
+              : <span className="rightbarInfoValue">{user.city ? user.city : ".........."}</span>
+            }
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">From:</span>
-            <span className="rightbarInfoValue">{user.from ? user.from : ".........."}</span>
+            {+userCurrent.id === +user.id ?
+              <span className="rightbarInfoValue">{userCurrent.from ? userCurrent.from : ".........."}</span>
+              : <span className="rightbarInfoValue">{user.from ? user.from : ".........."}</span>
+            }
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">Relationship:</span>
-            <span className="rightbarInfoValue">{+user.relationship === 1 ? "Single" : +user.relationship === 2 ? "Marry" : "Dating"}</span>
+            {+userCurrent.id === +user.id ?
+              <span className="rightbarInfoValue">{+userCurrent.relationship === 1 ? "Single" : +userCurrent.relationship === 2 ? "Marry" : "Dating"}</span>
+              : <span className="rightbarInfoValue">{+user.relationship === 1 ? "Single" : +user.relationship === 2 ? "Marry" : "Dating"}</span>
+            }
           </div>
         </div>
         <h4 className="rightbarTitle">User friends</h4>
@@ -108,7 +135,7 @@ export default function Rightbar({ user }) {
             <div className="rightbarFollowing" key={u.id}>
               <Link to={`/profile/${u.id}`}>
                 <img
-                  src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
+                  src={u.profilePicture ? process.env.REACT_APP_ASSETS + "/" + u.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
                   alt=""
                   className="rightbarFollowingImg"
                 />
@@ -117,6 +144,9 @@ export default function Rightbar({ user }) {
             </div>
           ))}
         </div>
+
+        <ModalUpdate show={show} handleClose={handleClose} />
+
       </>
     );
   };

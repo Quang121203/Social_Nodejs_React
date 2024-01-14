@@ -63,7 +63,7 @@ export default function Share({getPostProfile,getPostTimeline}) {
     <div className="share">
       <form className="shareWrapper" onSubmit={(e) => handleSubmit(e)}>
         <div className="shareTop">
-          <img className="shareProfileImg" src={user.profilePicture ? user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"} alt="" />
+          <img className="shareProfileImg" src={user.profilePicture ? process.env.REACT_APP_ASSETS + "/" + user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"} alt="" />
           <input
             placeholder={`What's in your mind ${user.username}?`}
             className="shareInput"

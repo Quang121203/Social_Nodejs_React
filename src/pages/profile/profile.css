@@ -9,10 +9,12 @@
 .profileCover{
     height: 320px;
     position: relative;
+    width: 100%;
 }
 
 .profileCoverImg{
     width: 100%;
+    
     height: 250px;
     object-fit: cover;
 }

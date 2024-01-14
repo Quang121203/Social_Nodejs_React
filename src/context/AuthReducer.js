@@ -1,5 +1,6 @@
 const AuthReducer = (state, action) => {
     switch (action.type) {
+
         case "LOGIN_START":
             return {
                 user: null,
@@ -36,6 +37,18 @@ const AuthReducer = (state, action) => {
                     ),
                 },
             };
+
+        case "UPDATE_USER":
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    city: action.payload.city,
+                    from: action.payload.from,
+                    relationship: action.payload.relationship
+                },
+            };
+
         default:
             return state;
     }
