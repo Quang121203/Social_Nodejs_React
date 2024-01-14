@@ -1,5 +1,6 @@
 const userServices = require('../services/userServices');
 const postServices = require('../services/postServices');
+const { unlink } = require('node:fs');
 
 
 const createPost = async (req, res) => {
@@ -65,6 +66,12 @@ const deletePost = async (req, res) => {
             })
         }
         await postServices.deletePost(req.params.id);
+
+        if (post.img) {
+            unlink(`public/${post.img}`, (err) => {
+            });
+        }
+
         return res.status(200).json({
             EC: 0,
             EM: 'delete post successful',

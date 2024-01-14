@@ -20,6 +20,11 @@ const findUserById = async (id) => {
     }
 }
 
+const getAllUser = async () => {
+    const users = await db.User.findAll();
+    return users
+}
+
 const hashPass = (pass) => {
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -54,5 +59,5 @@ const deleteUser = async (id) => {
 
 module.exports = {
     hashPass, checkPass,
-    getUser, createUser, findUserById, updateUser, deleteUser
+    getUser, createUser, findUserById, updateUser, deleteUser, getAllUser
 };

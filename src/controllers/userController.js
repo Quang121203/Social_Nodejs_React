@@ -1,11 +1,11 @@
 const userServices = require('../services/userServices');
-
+const { unlink } = require('node:fs');
 
 const updateUser = async (req, res) => {
     try {
         const user = await userServices.findUserById(req.body.id);
 
-        if (req.params.id !== req.body.id && !user.isAdmin) {
+        if (+req.params.id !== +req.body.id && !user.isAdmin) {
             return res.status(401).json({
                 EC: 1,
                 EM: "you can't update orther user",
@@ -17,6 +17,16 @@ const updateUser = async (req, res) => {
             req.body.password = userServices.hashPass(req.body.password);
         }
 
+        if (req.body.coverPicture && user.coverPicture) {
+            unlink(`public/${user.coverPicture}`, (err) => {
+            });
+        }
+
+        if (req.body.profilePicture && user.profilePicture) {
+            unlink(`public/${user.profilePicture}`, (err) => {
+            });
+        }
+
         await userServices.updateUser(req.body, req.params.id);
 
         return res.status(200).json({
@@ -26,6 +36,7 @@ const updateUser = async (req, res) => {
         })
     }
     catch (err) {
+        console.err(err)
         return res.status(404).json({
             EC: -1,
             EM: err,
@@ -79,6 +90,35 @@ const getUser = async (req, res) => {
             EC: 0,
             EM: '',
             DT: user
+        })
+    }
+    catch (err) {
+        return res.status(404).json({
+            EC: -1,
+            EM: err,
+            DT: ''
+        })
+    }
+}
+
+const getUserByName = async (req, res) => {
+    try {
+        let users = await userServices.getAllUser();
+
+        users = users.filter(user => user.username.includes(req.params.username));
+
+        if (!users) {
+            return res.status(200).json({
+                EC: 1,
+                EM: "user dont exist",
+                DT: ''
+            })
+        }
+
+        return res.status(200).json({
+            EC: 0,
+            EM: '',
+            DT: users
         })
     }
     catch (err) {
@@ -204,6 +244,6 @@ const unfollow = async (req, res) => {
     }
 }
 module.exports = {
-    updateUser, deleteUser, getUser,
+    updateUser, deleteUser, getUser, getUserByName,
     follow, unfollow
 };
