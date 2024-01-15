@@ -1,5 +1,6 @@
 const userServices = require('../services/userServices');
 const { unlink } = require('node:fs');
+const tokenService = require('../services/tokenServices');
 
 const updateUser = async (req, res) => {
     try {
@@ -28,6 +29,13 @@ const updateUser = async (req, res) => {
         }
 
         await userServices.updateUser(req.body, req.params.id);
+        const newUser = await userServices.findUserById(req.body.id);
+
+        const token = tokenService.createToken({ user: newUser });
+
+        res.cookie('jwt', token, { httpOnly: true }, {
+            expires: new Date(Date.now() + 8 * 3600000) // cookie will be removed after 8 hours
+        });
 
         return res.status(200).json({
             EC: 0,
@@ -36,7 +44,7 @@ const updateUser = async (req, res) => {
         })
     }
     catch (err) {
-        console.err(err)
+        console.log(err)
         return res.status(404).json({
             EC: -1,
             EM: err,
@@ -90,6 +98,32 @@ const getUser = async (req, res) => {
             EC: 0,
             EM: '',
             DT: user
+        })
+    }
+    catch (err) {
+        return res.status(404).json({
+            EC: -1,
+            EM: err,
+            DT: ''
+        })
+    }
+}
+
+const getUserCurrent = async (req, res) => {
+    try {
+
+        if (!req.user) {
+            return res.status(200).json({
+                EC: 1,
+                EM: "user dont exist",
+                DT: ''
+            })
+        }
+
+        return res.status(200).json({
+            EC: 0,
+            EM: '',
+            DT: req.user
         })
     }
     catch (err) {
@@ -244,6 +278,6 @@ const unfollow = async (req, res) => {
     }
 }
 module.exports = {
-    updateUser, deleteUser, getUser, getUserByName,
+    updateUser, deleteUser, getUser, getUserByName, getUserCurrent,
     follow, unfollow
 };

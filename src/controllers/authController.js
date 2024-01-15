@@ -1,5 +1,5 @@
 const userServices = require('../services/userServices');
-
+const tokenService = require('../services/tokenServices');
 
 const login = async (req, res) => {
     try {
@@ -12,8 +12,14 @@ const login = async (req, res) => {
             })
         }
 
-        const checkPass =userServices.checkPass(req.body.password,checkUser.password);
+        const checkPass = userServices.checkPass(req.body.password, checkUser.password);
         if (checkPass) {
+            const token = tokenService.createToken({ user: checkUser });
+
+            res.cookie('jwt', token, { httpOnly: true }, {
+                expires: new Date(Date.now() + 8 * 3600000) // cookie will be removed after 8 hours
+            });
+            
             return res.status(200).json({
                 EC: 0,
                 EM: "login success",
@@ -26,7 +32,7 @@ const login = async (req, res) => {
             EM: "password not right",
             DT: ''
         })
-        
+
     } catch (err) {
         return res.status(404).json({
             EC: -1,
@@ -48,7 +54,7 @@ const register = async (req, res) => {
             })
         }
 
-        req.body.password= userServices.hashPass(req.body.password);
+        req.body.password = userServices.hashPass(req.body.password);
         await userServices.createUser(req.body);
 
         return res.status(200).json({

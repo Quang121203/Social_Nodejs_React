@@ -1,7 +1,9 @@
 const express = require('express')
-require('dotenv').config();
+require('dotenv').config()
 const router = require('./router.js')
 const path = require('path')
+const services = require('./services/tokenServices.js')
+var cookieParser = require('cookie-parser')
 
 const app = express()
 
@@ -31,7 +33,11 @@ const port = process.env.port;
 //set up req.body
 app.use(express.json());
 
+app.use(cookieParser());
+
 app.use('/api', router)
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
