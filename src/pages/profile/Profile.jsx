@@ -12,7 +12,7 @@ export default function Profile() {
   const [userProfile, setUserProfile] = useState({});
 
   const { id } = useParams();
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
 
   useEffect(() => {
     getUser(id);
@@ -37,6 +37,7 @@ export default function Profile() {
       await axios.post("/images", data);
       await axios.put(`/user/${user.id}`, { coverPicture: fileName, id: user.id })
       getUser(id);
+
     }
   }
 
@@ -50,6 +51,7 @@ export default function Profile() {
 
       await axios.post("/images", data);
       await axios.put(`/user/${user.id}`, { profilePicture: fileName, id: user.id })
+      dispatch({ type: "UPDATE_USER", payload: { profilePicture: fileName } });
       getUser(id);
     }
   }

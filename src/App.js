@@ -17,19 +17,19 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
-  const { user } = useContext(AuthContext);
-
+  const { user, isFetching } = useContext(AuthContext);
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-          <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-          <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
-        </Routes>
-      </BrowserRouter>
-
+      {!isFetching &&
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+            <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+            <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+          </Routes>
+        </BrowserRouter>
+      }
       <ToastContainer
         position="top-right"
         autoClose={5000}

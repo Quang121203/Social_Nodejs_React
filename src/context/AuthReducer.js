@@ -37,7 +37,6 @@ const AuthReducer = (state, action) => {
                     ),
                 },
             };
-
         case "UPDATE_USER":
             return {
                 ...state,
@@ -45,7 +44,8 @@ const AuthReducer = (state, action) => {
                     ...state.user,
                     city: action.payload.city,
                     from: action.payload.from,
-                    relationship: action.payload.relationship
+                    relationship: action.payload.relationship,
+                    profilePicture: action.payload.profilePicture ? action.payload.profilePicture : state.user.profilePicture
                 },
             };
 

@@ -7,21 +7,20 @@ import { AuthContext } from "../../context/AuthContext";
 
 
 const ModalUpdate = ({ handleClose, show }) => {
-    const { dispatch ,user} = useContext(AuthContext);
+    const { dispatch, user } = useContext(AuthContext);
     const [city, setCity] = useState(user.city ? user.city : '');
     const [from, setFrom] = useState(user.from ? user.from : '');
     const [relationship, setRelationship] = useState(user.relationship);
 
     const handleUpdate = async () => {
-        const res = await axios.put(`/user/${user.id}`, { id: user.id, city: city, from: from, relationship: relationship })
+        const res = await axios.put(`/user/${user.id}`, { city: city, from: from, relationship: relationship,id: user.id})
         dispatch({ type: "UPDATE_USER", payload: { city: city, from: from, relationship: relationship } });
-        
+
         handleClose();
         toast.success(res.data.EM);
         setCity(user.city ? user.city : '');
         setFrom(user.from ? user.from : '');
         setRelationship(user.relationship);
-        console.log(user);
     }
 
     return (
