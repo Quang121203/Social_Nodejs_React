@@ -35,7 +35,7 @@ export default function Profile() {
       data.append("file", file);
 
       await axios.post("/images", data);
-      await axios.put(`/user/${user.id}`, { coverPicture: fileName, id: user.id })
+      await axios.put(`/user/${user.id}`, { coverPicture: fileName})
       getUser(id);
 
     }
@@ -50,7 +50,7 @@ export default function Profile() {
       data.append("file", file);
 
       await axios.post("/images", data);
-      await axios.put(`/user/${user.id}`, { profilePicture: fileName, id: user.id })
+      await axios.put(`/user/${user.id}`, { profilePicture: fileName})
       dispatch({ type: "UPDATE_USER", payload: { profilePicture: fileName } });
       getUser(id);
     }

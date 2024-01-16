@@ -13,7 +13,7 @@ const ModalUpdate = ({ handleClose, show }) => {
     const [relationship, setRelationship] = useState(user.relationship);
 
     const handleUpdate = async () => {
-        const res = await axios.put(`/user/${user.id}`, { city: city, from: from, relationship: relationship,id: user.id})
+        const res = await axios.put(`/user/${user.id}`, { city: city, from: from, relationship: relationship})
         dispatch({ type: "UPDATE_USER", payload: { city: city, from: from, relationship: relationship } });
 
         handleClose();

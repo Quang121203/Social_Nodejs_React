@@ -23,7 +23,7 @@ export default function Post({ post, getPostProfile, getPostTimeline }) {
   const likeHandler = async () => {
     setLike(isLiked ? like - 1 : like + 1)
     setIsLiked(!isLiked)
-    await axios.post(`/post/${post.id}/like`, { userID: userCurrent.id });
+    await axios.post(`/post/${post.id}/like`);
   }
 
   useEffect(() => {

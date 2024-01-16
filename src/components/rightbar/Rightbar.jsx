@@ -68,11 +68,11 @@ export default function Rightbar({ user }) {
     const handleFollow = async () => {
 
       if (!followed) {
-        axios.post(`/user/${user.id}/follow`, { id: userCurrent.id });
+        axios.post(`/user/${user.id}/follow`);
         dispatch({ type: "FOLLOW", payload: user.id.toString() });
       }
       else {
-        axios.post(`/user/${user.id}/unfollow`, { id: userCurrent.id });
+        axios.post(`/user/${user.id}/unfollow`);
         dispatch({ type: "UNFOLLOW", payload: user.id.toString() });
       }
       setFollowed(!followed)

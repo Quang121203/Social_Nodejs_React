@@ -51,7 +51,7 @@ export default function Topbar() {
             <div className="tippy" tabIndex="-1" {...attrs}>
 
               {result.map(user =>
-                <AccountItem user={user} />
+                <AccountItem user={user} key={user.id} />
               )
 
               }
