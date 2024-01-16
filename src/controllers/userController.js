@@ -4,9 +4,9 @@ const tokenService = require('../services/tokenServices');
 
 const updateUser = async (req, res) => {
     try {
-        const user = await userServices.findUserById(req.body.id);
+       
 
-        if (+req.params.id !== +req.body.id && !user.isAdmin) {
+        if (+req.params.id !== +req.user.id && !req.user.isAdmin) {
             return res.status(401).json({
                 EC: 1,
                 EM: "you can't update orther user",
@@ -18,18 +18,18 @@ const updateUser = async (req, res) => {
             req.body.password = userServices.hashPass(req.body.password);
         }
 
-        if (req.body.coverPicture && user.coverPicture) {
-            unlink(`public/${user.coverPicture}`, (err) => {
+        if (req.body.coverPicture && req.user.coverPicture) {
+            unlink(`public/${req.user.coverPicture}`, (err) => {
             });
         }
 
-        if (req.body.profilePicture && user.profilePicture) {
-            unlink(`public/${user.profilePicture}`, (err) => {
+        if (req.body.profilePicture && req.user.profilePicture) {
+            unlink(`public/${req.user.profilePicture}`, (err) => {
             });
         }
 
         await userServices.updateUser(req.body, req.params.id);
-        const newUser = await userServices.findUserById(req.body.id);
+        const newUser = await userServices.findUserById(req.user.id);
 
         const token = tokenService.createToken({ user: newUser });
 
@@ -56,9 +56,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const user = await userServices.findUserById(req.body.id);
-
-        if (req.params.id !== req.body.id && !user.isAdmin) {
+        if (req.params.id !== req.user.id && !req.user.isAdmin) {
             return res.status(401).json({
                 EC: 1,
                 EM: "you can't delete orther user",
@@ -165,12 +163,12 @@ const getUserByName = async (req, res) => {
 }
 
 const follow = async (req, res) => {
+    console.log(req.user);
     try {
-        if (req.body.id !== req.params.id) {
-            const currentUser = await userServices.findUserById(req.body.id);
+        if (req.user.id !== req.params.id) {
             const user = await userServices.findUserById(req.params.id);
 
-            if (currentUser.followings.includes(req.params.id.toString())) {
+            if (req.user.followings.includes(req.params.id.toString())) {
                 return res.status(200).json({
                     EC: 1,
                     EM: "you already follow this user",
@@ -186,15 +184,21 @@ const follow = async (req, res) => {
                 })
             }
 
-            const followings = currentUser.followings;
+            const followings = req.user.followings;
             followings.push(user.id);
 
             const followers = user.followers;
-            followers.push(currentUser.id);
+            followers.push(+req.user.id);
 
 
-            await userServices.updateUser({ followings }, currentUser.id);
+            await userServices.updateUser({ followings }, req.user.id);
             await userServices.updateUser({ followers }, user.id);
+
+            const newUser = await userServices.findUserById(req.user.id);
+            const token = tokenService.createToken({ user: newUser });
+            res.cookie('jwt', token, { httpOnly: true }, {
+                expires: new Date(Date.now() + 8 * 3600000) // cookie will be removed after 8 hours
+            });
 
             return res.status(200).json({
                 EC: 0,
@@ -221,11 +225,11 @@ const follow = async (req, res) => {
 
 const unfollow = async (req, res) => {
     try {
-        if (req.body.id !== req.params.id) {
-            const currentUser = await userServices.findUserById(req.body.id);
+        if (req.user.id !== req.params.id) {
+           
             const user = await userServices.findUserById(req.params.id);
 
-            if (!currentUser.followings.includes(req.params.id.toString())) {
+            if (!req.user.followings.includes(req.params.id.toString())) {
                 return res.status(200).json({
                     EC: 1,
                     EM: "you already unfollow this user",
@@ -241,7 +245,7 @@ const unfollow = async (req, res) => {
                 })
             }
 
-            let followings = currentUser.followings;
+            let followings = req.user.followings;
             followings = followings.filter((id) => {
                 return id != +user.id
             })
@@ -249,11 +253,17 @@ const unfollow = async (req, res) => {
 
             let followers = user.followers;
             followers = followers.filter((id) => {
-                return id != +currentUser.id
+                return id != +req.user.id
             })
 
-            await userServices.updateUser({ followings }, currentUser.id);
+            await userServices.updateUser({ followings }, req.user.id);
             await userServices.updateUser({ followers }, user.id);
+
+            const newUser = await userServices.findUserById(req.user.id);
+            const token = tokenService.createToken({ user: newUser });
+            res.cookie('jwt', token, { httpOnly: true }, {
+                expires: new Date(Date.now() + 8 * 3600000) // cookie will be removed after 8 hours
+            });
 
             return res.status(200).json({
                 EC: 0,

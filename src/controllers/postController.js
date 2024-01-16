@@ -58,7 +58,7 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
     try {
         const post = await postServices.getPost(req.params.id);
-        if (+post.userID !== +req.body.userID) {
+        if (+post.userID !== +req.user.id) {
             return res.status(200).json({
                 EC: 1,
                 EM: 'you can only delete your post',
@@ -89,7 +89,6 @@ const deletePost = async (req, res) => {
 const likePost = async (req, res) => {
     try {
         const post = await postServices.getPost(req.params.id);
-        const user = await userServices.findUserById(req.body.userID);
         if (!post) {
             return res.status(200).json({
                 EC: 1,
@@ -98,7 +97,7 @@ const likePost = async (req, res) => {
             })
         }
 
-        if (!user) {
+        if (!req.user) {
             return res.status(200).json({
                 EC: 1,
                 EM: "this user don't exist",
@@ -108,9 +107,9 @@ const likePost = async (req, res) => {
 
         let likes = post.like;
 
-        if (likes.includes(req.body.userID.toString())) {
+        if (likes.includes(req.user.id.toString())) {
             likes = likes.filter((id) => {
-                return id != +req.body.userID
+                return id != +req.user.id
             })
             await postServices.updatePost({ like: likes }, req.params.id);
             return res.status(200).json({
@@ -120,7 +119,7 @@ const likePost = async (req, res) => {
             })
         }
 
-        likes.push(req.body.userID);
+        likes.push(req.user.id);
         await postServices.updatePost({ like: likes }, req.params.id);
         return res.status(200).json({
             EC: 0,
@@ -129,6 +128,7 @@ const likePost = async (req, res) => {
         })
 
     } catch (err) {
+        console.log(err);
         return res.status(404).json({
             EC: -1,
             EM: err,
