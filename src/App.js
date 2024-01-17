@@ -3,6 +3,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
 import Register from "./pages/register/Register";
+import Messenger from './pages/messenger/Messenger';
 import {
   BrowserRouter,
   Route,
@@ -17,16 +18,19 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
-  const { user, isFetching } = useContext(AuthContext);
+  const { user, isLoading } = useContext(AuthContext);
+  console.log(isLoading);
   return (
     <>
-      {!isFetching &&
+      {!isLoading &&
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+            <Route path="/chat" element={<PrivateRoute><Messenger /></PrivateRoute>} />
+            {console.log("test")}
             <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
             <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-            <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </BrowserRouter>
       }

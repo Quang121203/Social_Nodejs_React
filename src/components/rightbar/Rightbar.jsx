@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "../../config/axios";
 import { Link } from "react-router-dom";
-import ModalUpdate from "../modalUpdate/modalUpdate";
+import ModalUpdate from "../modalUpdate/ModalUpdate";
 
 export default function Rightbar({ user }) {
 

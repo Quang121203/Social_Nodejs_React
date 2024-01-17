@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import useDebounce from "../../hooks/useDebounce";
 import Tippy from '@tippyjs/react/headless';
 import axios from "../../config/axios";
-import AccountItem from "../accountItem/accountItem";
+import AccountItem from "../accountItem/AccountItem";
 
 export default function Topbar() {
 

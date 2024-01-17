@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
 import Tippy from '@tippyjs/react/headless';
-import ModalDelete from "../modalDelete/modalDelete";
+import ModalDelete from "../modalDelete/ModalDelete";
 TimeAgo.addDefaultLocale(en)
 
 export default function Post({ post, getPostProfile, getPostTimeline }) {

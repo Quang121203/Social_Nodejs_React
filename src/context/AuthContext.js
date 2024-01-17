@@ -5,8 +5,8 @@ import axios from "../config/axios";
 
 const INITIAL_STATE = {
     user: null,
-    isFetching: false,
     error: false,
+    isLoading:true
 };
 
 const AuthContext = createContext(INITIAL_STATE);
@@ -15,15 +15,18 @@ const AuthProvider = ({ children }) => {
 
 
     useEffect(() => {
-        getUser();
+        if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+            getUser(); 
+        }
+        else{
+            dispatch({ type: "LOGOUT" });
+        }
     }, [])
 
     const getUser = async () => {
-
         dispatch({ type: "LOGIN_START" });
         try {
             const res = await axios.get('/usercurrent');
-            console.log(res.data.DT);
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.DT });
         } catch (err) {
             dispatch({ type: "LOGIN_FAILURE" });
@@ -34,8 +37,8 @@ const AuthProvider = ({ children }) => {
         <AuthContext.Provider
             value={{
                 user: state.user,
-                isFetching: state.isFetching,
                 error: state.error,
+                isLoading:state.isLoading,
                 dispatch,
             }}
         >
