@@ -9,6 +9,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      conversationID: {
+        type: Sequelize.INTEGER
+      }, 
       senderID: {
         type: Sequelize.INTEGER
       },   
