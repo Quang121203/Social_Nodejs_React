@@ -3,13 +3,14 @@ import CloseFriend from "../closeFriend/CloseFriend";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "../../config/axios";
+import { Link } from "react-router-dom";
 
 
 export default function Sidebar() {
 
   const [followings, setFollowings] = useState([]);
   const { user } = useContext(AuthContext);
-  
+
   useEffect(() => {
     getUserFollowings(user);
   }, [user])
@@ -22,7 +23,7 @@ export default function Sidebar() {
     })
 
     const results = await Promise.all(promises);
-   
+
     setFollowings(results);
   }
 
@@ -30,14 +31,18 @@ export default function Sidebar() {
     <div className="sidebar">
       <div className="sidebarWrapper">
         <ul className="sidebarList">
-          <li className="sidebarListItem">
-            <i className="fa-solid fa-rss sidebarIcon"></i>
-            <span className="sidebarListItemText">Feed</span>
-          </li>
-          <li className="sidebarListItem">
-            <i className="fa-solid fa-comment sidebarIcon"></i>
-            <span className="sidebarListItemText">Chats</span>
-          </li>
+          <Link to="/" className="sidebarListItem">
+            <li>
+              <i className="fa-solid fa-rss sidebarIcon"></i>
+              <span className="sidebarListItemText">Feed</span>
+            </li>
+          </Link>
+          <Link to="/chat" className="sidebarListItem">
+            <li>
+              <i className="fa-solid fa-comment sidebarIcon"></i>
+              <span className="sidebarListItemText">Chats</span>
+            </li>
+          </Link>
           <li className="sidebarListItem">
             <i className="fa-solid fa-video sidebarIcon"></i>
             <span className="sidebarListItemText">Videos</span>

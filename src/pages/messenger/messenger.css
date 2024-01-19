@@ -7,13 +7,6 @@
     flex: 3.5;
   }
   
-  .chatMenuInput {
-    width: 90%;
-    padding: 10px 0;
-    border: none;
-    border-bottom: 1px solid gray;
-  }
-  
   .chatBox {
     flex: 10;
   }
@@ -78,10 +71,7 @@
       flex: 1;
     }
   
-    .chatMenuInput {
-      display: none;
-    }
-  
+   
     .chatBox{
       flex: 10;
     }

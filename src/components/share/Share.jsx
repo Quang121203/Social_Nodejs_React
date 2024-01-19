@@ -75,7 +75,7 @@ export default function Share({getPostProfile,getPostTimeline}) {
         {file && (
           <div className="shareImgContainer">
             <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
-            <i class="fa-solid fa-xmark" onClick={() => setFile(null)} ></i>
+            <i className="fa-solid fa-xmark" onClick={() => setFile(null)} ></i>
           </div>
         )}
 

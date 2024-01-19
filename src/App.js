@@ -19,7 +19,7 @@ import { AuthContext } from "./context/AuthContext";
 
 function App() {
   const { user, isLoading } = useContext(AuthContext);
-  console.log(isLoading);
+ 
   return (
     <>
       {!isLoading &&
@@ -27,7 +27,6 @@ function App() {
           <Routes>
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/chat" element={<PrivateRoute><Messenger /></PrivateRoute>} />
-            {console.log("test")}
             <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
             <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
             <Route path="/register" element={<Register />} />
