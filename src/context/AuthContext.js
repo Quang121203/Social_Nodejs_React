@@ -2,7 +2,6 @@ import { createContext, useReducer, useEffect } from 'react';
 import AuthReducer from './AuthReducer';
 import axios from "../config/axios";
 
-
 const INITIAL_STATE = {
     user: null,
     error: false,

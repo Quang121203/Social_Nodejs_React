@@ -4,15 +4,15 @@ import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en'
+// import en from 'javascript-time-ago/locale/en'
 import Tippy from '@tippyjs/react/headless';
 import ModalDelete from "../modalDelete/ModalDelete";
-TimeAgo.addDefaultLocale(en)
+
 
 export default function Post({ post, getPostProfile, getPostTimeline }) {
 
   const timeAgo = new TimeAgo('en-US')
-
+  
   const { user: userCurrent } = useContext(AuthContext);
   const [like, setLike] = useState(post.like.length)
   const [isLiked, setIsLiked] = useState(post.like.includes(userCurrent.id.toString()))

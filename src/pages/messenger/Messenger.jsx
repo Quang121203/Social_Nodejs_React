@@ -7,15 +7,23 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "../../config/axios";
 
+import { socket } from '../../socket/socket';
 
 export default function Messenger() {
     const { user } = useContext(AuthContext);
     const [conversation, setConversation] = useState([]);
     const [currentConversation, setCurrentConversation] = useState();
     const [chat, setChat] = useState([]);
+    const [online, setOnline] = useState();
     const mess = useRef();
     const chatMessage = useRef();
 
+    useEffect(() => {
+        socket.on('get user online', (online) => {
+            setOnline(online);
+            console.log(online);
+        })
+    }, [])
 
     useEffect(() => {
         getConversation(user.id);
@@ -42,21 +50,25 @@ export default function Messenger() {
         if (res.data && +res.data.EC === 0) {
             setChat(res.data.DT);
         }
-        
+
     }
 
-    const handleSend = async() => {
-        if(!chatMessage.current.value.trim()){
+    const handleSend = async () => {
+
+        socket.emit('chat message', { msg: "alo", id: currentConversation });
+
+        if (!chatMessage.current.value.trim()) {
             return
         }
-        await axios.post(`/message`,{
-            conversationID:currentConversation,
-            senderID:user.id,
-            text:chatMessage.current.value
+        await axios.post(`/message`, {
+            conversationID: currentConversation,
+            senderID: user.id,
+            text: chatMessage.current.value
         });
-        
+
         getChat(currentConversation);
-        chatMessage.current.value='';
+        chatMessage.current.value = '';
+
     }
 
     return (
@@ -88,7 +100,7 @@ export default function Messenger() {
                 </div>
                 <div className="chatOnline">
                     <div className="chatOnlineWrapper">
-                        {user.followings.map((id) => <ChatOnline id={id} key={id} />)}
+                        {user.followings.map((id) => <ChatOnline id={id} key={id} online={online && online.find((o) => o.user === +id)} />)}
                     </div>
                 </div>
             </div>

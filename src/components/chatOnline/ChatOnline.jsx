@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import axios from "../../config/axios";
 
 
-export default function ChatOnline({id}) {
-    const [user, setUser] = useState();
 
+export default function ChatOnline({ id, online }) {
+    const [user, setUser] = useState();
     useEffect(() => {
         const getUser = async (id) => {
             const res = await axios.get(`/user/${id}`);
@@ -29,7 +29,7 @@ export default function ChatOnline({id}) {
                                 src={user.profilePicture ? process.env.REACT_APP_ASSETS + "/" + user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"}
                                 alt=""
                             />
-                            <div className="chatOnlineBadge"></div>
+                            {online && <div className="chatOnlineBadge"></div>}
                         </div>
                         <span className="chatOnlineName">{user.username}</span>
                     </div>

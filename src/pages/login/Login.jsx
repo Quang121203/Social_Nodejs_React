@@ -5,12 +5,11 @@ import { AuthContext } from "../../context/AuthContext";
 import { toast } from 'react-toastify';
 import { Link } from "react-router-dom";
 
-
 export default function Login() {
   const email = useRef();
   const password = useRef();
 
-  const {  dispatch, isFetching } = useContext(AuthContext);
+  const { dispatch, isFetching } = useContext(AuthContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -26,8 +25,9 @@ export default function Login() {
       }
       if (+res.data.EC === 0) {
         toast.success(res.data.EM);
+        dispatch({ type: "LOGIN_SUCCESS", payload: res.data.DT });
       }
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.DT });
+
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE" });
     }
@@ -53,7 +53,7 @@ export default function Login() {
               Create a New Account
             </Link>
           </form>
-          
+
         </div>
       </div>
     </div>

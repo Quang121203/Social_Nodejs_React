@@ -13,13 +13,25 @@ import {
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from "./components/PrivateRoute"
-
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en';
+import { socket } from './socket/socket';
+TimeAgo.addDefaultLocale(en);
 
 function App() {
   const { user, isLoading } = useContext(AuthContext);
- 
+
+  useEffect(() => {
+
+    if (!isLoading && user) {
+      socket.connect();
+      socket.emit('online', user.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading])
+
   return (
     <>
       {!isLoading &&
