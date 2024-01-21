@@ -5,7 +5,7 @@ const createMessage = async (req, res) => {
     console.log(req.body)
     try {
         const data = await messageServices.createMessage(req.body);
-        return res.status(404).json({
+        return res.status(200).json({
             EC: 0,
             EM: 'create successfully',
             DT: data

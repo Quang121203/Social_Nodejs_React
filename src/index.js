@@ -1,13 +1,22 @@
-const express = require('express')
-require('dotenv').config()
-const router = require('./router.js')
-const path = require('path')
-const services = require('./services/tokenServices.js')
-var cookieParser = require('cookie-parser')
+const express = require('express');
+const router = require('./router.js');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const { Server } = require('socket.io');
+const socket = require('./socket');
+require('dotenv').config();
 
 const app = express()
 
-app.use("/images",express.static(path.join(__dirname, '../public')));
+const io = new Server({
+  cors: {
+    origin: "http://localhost:3000"
+  }
+});
+
+io.listen(8081);
+
+app.use("/images", express.static(path.join(__dirname, '../public')));
 
 app.use(function (req, res, next) {
 
@@ -37,11 +46,13 @@ app.use(cookieParser());
 
 app.use('/api', router)
 
-
+socket(io);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
 
 
 

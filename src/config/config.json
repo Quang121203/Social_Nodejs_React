@@ -5,8 +5,10 @@
     "database": "social",
     "host": "127.0.0.1",
     "dialect": "mysql",
+    "logging": false,
     "define": {
       "freezeTableName": true
+      
     }
   },
   "test": {
