@@ -6,6 +6,14 @@ const createConversation = async (conversation) => {
     return await db.Conversation.create(conversation);
 }
 
+const findConversationByID = async (id) => {
+    const conversation = await db.Conversation.findByPk(id);
+    if (!conversation) {
+        return false;
+    }
+    return conversation
+}
+
 const findConversation2User = async (userID1, userID2) => {
     const conversation = await db.Conversation.findOne({
         where: {
@@ -38,4 +46,4 @@ const findConversation1User = async (userID) => {
     return conversation
 }
 
-module.exports = { createConversation, findConversation1User, findConversation2User }
+module.exports = { createConversation, findConversation1User, findConversation2User,findConversationByID }

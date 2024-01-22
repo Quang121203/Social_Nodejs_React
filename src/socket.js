@@ -1,3 +1,6 @@
+const conversationServices = require('./services/conversationServices');
+
+
 let online = [];
 
 const soket = (io) => {
@@ -12,12 +15,18 @@ const soket = (io) => {
             else {
                 online[foundIndex] = { user: userID, socket: socket.id }
             }
-            console.log(online);
             io.emit('get user online', online);
         });
 
-        socket.on('chat message', ({ msg, id }) => {
-            console.log('message: ' + msg + id);
+        socket.on('chat message', async (id) => {
+            const conversation = await conversationServices.findConversationByID(id);
+            const senderID = (online.find((o) => o.socket === socket.id))?.user;
+            const receiverId = conversation.userID1 === senderID ? conversation.userID2 : conversation.userID1;
+            const receiverSocketID = (online.find((o) => +o.user === +receiverId));
+
+            if (receiverSocketID) {
+                io.to(receiverSocketID.socket).emit("getMessage",id);
+            }
         });
 
         socket.on('disconnect', () => {
@@ -26,7 +35,7 @@ const soket = (io) => {
                 return item.socket !== socket.id
             })
             io.emit('get user online', online);
-            console.log(online);
+
         });
     });
 }
