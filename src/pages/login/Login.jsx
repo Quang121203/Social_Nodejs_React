@@ -24,9 +24,9 @@ export default function Login() {
         toast.error(res.data.EM);
       }
       if (+res.data.EC === 0) {
-        toast.success(res.data.EM);
-        dispatch({ type: "LOGIN_SUCCESS", payload: res.data.DT });
+        toast.success(res.data.EM);       
       }
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.DT });
 
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE" });

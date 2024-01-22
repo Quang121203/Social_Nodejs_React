@@ -5,26 +5,30 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "../../config/axios";
 import { Link } from "react-router-dom";
 import ModalUpdate from "../modalUpdate/ModalUpdate";
+import { socket } from '../../socket/socket';
+
 
 export default function Rightbar({ user }) {
 
   const { user: userCurrent, dispatch } = useContext(AuthContext);
 
-
   const HomeRightbar = () => {
-    const [followings, setFollowings] = useState([]);
+    const [online, setOnline] = useState([]);
 
     useEffect(() => {
-      getUserFollowings(userCurrent);
+      userCurrent && socket.on('get user online', (online) => {
+        getUserOnlines(userCurrent, online);
+      })
     }, [])
 
-    const getUserFollowings = async (userCurrent) => {
+    const getUserOnlines = async (userCurrent, online) => {
       const promises = userCurrent.followings.map(async (id) => {
         const res = await axios.get(`/user/${id}`);
         return (res.data.DT);
       })
-      const results = await Promise.all(promises);
-      setFollowings(results);
+      let results = await Promise.all(promises);
+      results = results.filter(r => online.some(o => +o.user === +r.id));
+      setOnline(results);
     }
 
     return (
@@ -38,7 +42,7 @@ export default function Rightbar({ user }) {
         <img className="rightbarAd" src={process.env.REACT_APP_ASSETS + "/ad.png"} alt="" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
-          {followings.map((u) => (
+          {online.map((u) => (
             <Online key={u.id} user={u} />
           ))}
         </ul>

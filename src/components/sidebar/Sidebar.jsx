@@ -37,12 +37,12 @@ export default function Sidebar() {
               <span className="sidebarListItemText">Feed</span>
             </li>
           </Link>
-          <Link to="/chat" className="sidebarListItem">
+          <a href="/chat" className="sidebarListItem">
             <li>
               <i className="fa-solid fa-comment sidebarIcon"></i>
               <span className="sidebarListItemText">Chats</span>
             </li>
-          </Link>
+          </a>
           <li className="sidebarListItem">
             <i className="fa-solid fa-video sidebarIcon"></i>
             <span className="sidebarListItemText">Videos</span>

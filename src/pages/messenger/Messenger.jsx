@@ -6,7 +6,6 @@ import ChatOnline from "../../components/chatOnline/ChatOnline";
 import { useContext, useEffect, useState, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "../../config/axios";
-
 import { socket } from '../../socket/socket';
 
 export default function Messenger() {
@@ -21,7 +20,9 @@ export default function Messenger() {
     useEffect(() => {
         socket.on('get user online', (online) => {
             setOnline(online);
-            console.log(online);
+        })
+        socket.on('getMessage', (id) => {
+            getChat(id);
         })
     }, [])
 
@@ -54,12 +55,10 @@ export default function Messenger() {
     }
 
     const handleSend = async () => {
-
-        socket.emit('chat message', { msg: "alo", id: currentConversation });
-
         if (!chatMessage.current.value.trim()) {
             return
         }
+        socket.emit('chat message', currentConversation);
         await axios.post(`/message`, {
             conversationID: currentConversation,
             senderID: user.id,
