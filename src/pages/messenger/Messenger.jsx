@@ -18,12 +18,14 @@ export default function Messenger() {
     const chatMessage = useRef();
 
     useEffect(() => {
+        !online && socket.emit('get user online')
         socket.on('get user online', (online) => {
             setOnline(online);
         })
         socket.on('getMessage', (id) => {
             getChat(id);
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -38,11 +40,17 @@ export default function Messenger() {
         mess.current && mess.current.scrollIntoView({ behavior: "smooth" });
     }, [chat]);
 
-    const getConversation = async (id) => {
+    const getConversation = async (id, currentConversation) => {
         const res = await axios.get(`/conversation/${id}/find`);
         if (res.data && +res.data.EC === 0) {
             setConversation(res.data.DT);
-            setCurrentConversation(res.data.DT[0].id);
+            if (currentConversation) {
+                setCurrentConversation(currentConversation);
+            }
+            else {
+                setCurrentConversation(res.data.DT[0].id);
+            }
+
         }
     }
 
@@ -68,6 +76,13 @@ export default function Messenger() {
         getChat(currentConversation);
         chatMessage.current.value = '';
 
+    }
+
+    const handleCreateConversation = async (id) => {
+        const res = await axios.post('/conversation', { userID1: user.id, userID2: +id });
+        if (res.data && res.data.DT) {
+            getConversation(user.id, res.data.DT.id);
+        }
     }
 
     return (
@@ -99,7 +114,7 @@ export default function Messenger() {
                 </div>
                 <div className="chatOnline">
                     <div className="chatOnlineWrapper">
-                        {user.followings.map((id) => <ChatOnline id={id} key={id} online={online && online.find((o) => o.user === +id)} />)}
+                        {user.followings.map((id) => <div key={id} onClick={() => handleCreateConversation(id)}><ChatOnline id={id} online={online && online.find((o) => o.user === +id)} /></div>)}
                     </div>
                 </div>
             </div>

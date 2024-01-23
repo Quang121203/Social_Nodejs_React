@@ -12,7 +12,7 @@ import ModalDelete from "../modalDelete/ModalDelete";
 export default function Post({ post, getPostProfile, getPostTimeline }) {
 
   const timeAgo = new TimeAgo('en-US')
-  
+
   const { user: userCurrent } = useContext(AuthContext);
   const [like, setLike] = useState(post.like.length)
   const [isLiked, setIsLiked] = useState(post.like.includes(userCurrent.id.toString()))
@@ -52,7 +52,6 @@ export default function Post({ post, getPostProfile, getPostTimeline }) {
     }
   }
 
-
   return (
     <div className="post">
       <div className="postWrapper">
@@ -71,7 +70,7 @@ export default function Post({ post, getPostProfile, getPostTimeline }) {
             <span className="postDate">{timeAgo.format(new Date(post.createdAt))}</span>
           </div>
 
-          {+userCurrent.id === post.userID &&
+          {((+userCurrent.id === post.userID) || userCurrent.isAdmin) &&
             <div className="postTopRight" onClick={() => setShowTippy(!showTippy)}>
               <Tippy
                 interactive
@@ -97,13 +96,12 @@ export default function Post({ post, getPostProfile, getPostTimeline }) {
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
-            <img className="likeIcon" src={process.env.REACT_APP_ASSETS + "/like.png"} onClick={likeHandler} alt="" />
-            <img className="likeIcon" src={process.env.REACT_APP_ASSETS + "/heart.png"} onClick={likeHandler} alt="" />
+            {isLiked
+              ? <img className="likeIcon" src={process.env.REACT_APP_ASSETS + "/like.png"} onClick={likeHandler} alt="" />
+              : <img className="likeIcon" src={process.env.REACT_APP_ASSETS + "/noLike.jpg"} onClick={likeHandler} alt="" />}
             <span className="postLikeCounter">{like} people like it</span>
           </div>
-          <div className="postBottomRight">
-            <span className="postCommentText">{post.comment} comments</span>
-          </div>
+          
         </div>
       </div>
 

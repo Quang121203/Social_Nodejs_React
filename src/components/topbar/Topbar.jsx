@@ -38,9 +38,9 @@ export default function Topbar() {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <a href="/" className="logo">
+        <Link to="/" className="logo">
           Social
-        </a>
+        </Link>
       </div>
 
       <div className="topbarCenter">
@@ -79,18 +79,8 @@ export default function Topbar() {
           <span className="topbarLink">Timeline</span>
         </div>
         <div className="topbarIcons">
-          <div className="topbarIconItem">
-            <i className="fa-solid fa-user"></i>
-            <span className="topbarIconBadge">1</span>
-          </div>
-          <div className="topbarIconItem">
-            <i className="fa-solid fa-comment"></i>
-            <span className="topbarIconBadge">2</span>
-          </div>
-          <div className="topbarIconItem">
-            <i className="fa-solid fa-bell"></i>
-            <span className="topbarIconBadge">1</span>
-          </div>
+          
+          
         </div>
         <Link to={`/profile/${user.id}`}>
           <img src={user.profilePicture ? process.env.REACT_APP_ASSETS + "/" + user.profilePicture : process.env.REACT_APP_ASSETS + "/person/noAvatar.png"} alt="" className="topbarImg" />

@@ -13,12 +13,18 @@ export default function Rightbar({ user }) {
   const { user: userCurrent, dispatch } = useContext(AuthContext);
 
   const HomeRightbar = () => {
-    const [online, setOnline] = useState([]);
+    const [online, setOnline] = useState();
 
     useEffect(() => {
+      !online && socket.emit('get user online')
       userCurrent && socket.on('get user online', (online) => {
         getUserOnlines(userCurrent, online);
       })
+
+      return () => {
+        socket.off('get user online');
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const getUserOnlines = async (userCurrent, online) => {
@@ -33,16 +39,11 @@ export default function Rightbar({ user }) {
 
     return (
       <>
-        <div className="birthdayContainer">
-          <img className="birthdayImg" src={process.env.REACT_APP_ASSETS + "/gift.png"} alt="" />
-          <span className="birthdayText">
-            <b>Pola Foster</b> and <b>3 other friends</b> have a birhday today.
-          </span>
-        </div>
+
         <img className="rightbarAd" src={process.env.REACT_APP_ASSETS + "/ad.png"} alt="" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
-          {online.map((u) => (
+          {online && online.map((u) => (
             <Online key={u.id} user={u} />
           ))}
         </ul>
