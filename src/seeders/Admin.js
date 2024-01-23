@@ -1,4 +1,7 @@
 'use strict';
+const userServices = require('../services/userServices');
+
+const password = userServices.hashPass("123456");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -8,7 +11,7 @@ module.exports = {
     await queryInterface.bulkInsert('User', [{
       email: 'admin@gmail.com',
       username: 'admin',
-      password: '123456',
+      password: password,
       isAdmin: true
     }], {});
 

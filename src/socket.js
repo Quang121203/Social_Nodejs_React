@@ -18,6 +18,10 @@ const soket = (io) => {
             io.emit('get user online', online);
         });
 
+        socket.on('get user online', () => {
+            io.emit('get user online', online);
+        });
+
         socket.on('chat message', async (id) => {
             const conversation = await conversationServices.findConversationByID(id);
             const senderID = (online.find((o) => o.socket === socket.id))?.user;

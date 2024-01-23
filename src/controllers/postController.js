@@ -58,7 +58,8 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
     try {
         const post = await postServices.getPost(req.params.id);
-        if (+post.userID !== +req.user.id) {
+       
+        if (+post.userID !== +req.user.id && !req.user.isAdmin) {
             return res.status(200).json({
                 EC: 1,
                 EM: 'you can only delete your post',
